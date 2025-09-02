@@ -2,12 +2,12 @@ CREATE DATABASE ophtalmo;
 \c ophtalmo;
 
 CREATE TABLE "role" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "titre" varchar
 );
 
 CREATE TABLE "users" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "nom" varchar,
   "prenom" varchar,
   "sexe" integer,
@@ -21,7 +21,7 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "rendez_vous" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "id_patient" integer,
   "id_medecin" integer,
   "date_heure" datetime,
@@ -29,27 +29,27 @@ CREATE TABLE "rendez_vous" (
 );
 
 CREATE TABLE "dossier_medical" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "id_patient" integer,
   "date_creation" date
 );
 
 CREATE TABLE "consultation" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "id_dossier" integer,
   "date_consultation" date,
   "type" text
 );
 
 CREATE TABLE "prescription" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "id_consultation" integer,
   "type" text,
   "details" text
 );
 
 CREATE TABLE "notification" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "id_patient" integer,
   "date_creation" date,
   "message" text
@@ -76,3 +76,5 @@ ALTER TABLE "dossier_medical" ADD FOREIGN KEY ("id") REFERENCES "consultation" (
 ALTER TABLE "consultation" ADD FOREIGN KEY ("id") REFERENCES "prescription" ("id_consultation");
 
 ALTER TABLE "users" ADD FOREIGN KEY ("id") REFERENCES "notification" ("id_patient");
+
+insert INTO role (titre) VALUES ('patient'),('medecin');
