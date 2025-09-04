@@ -20,6 +20,16 @@ CREATE TABLE "users" (
   "created_at" timestamp
 );
 
+INSERT INTO "users" 
+(nom, prenom, sexe, date_naissance, adresse, telephone, email, role, mot_de_passe, created_at)
+VALUES
+('Andriamanga', 'Hery', 1, '1975-11-20', 'Ivandry, Antananarivo', '0324455667', 'hery.andriamanga@ophtalmo.mg', 2, 'pass123', NOW()),
+
+('Ravelo', 'Fara', 2, '1982-07-14', 'Isoraka, Antananarivo', '0335566778', 'fara.ravelo@ophtalmo.mg', 2, 'pass123', NOW()),
+
+('Rakotobe', 'Lova', 1, '1979-02-08', 'Ambanidia, Antananarivo', '0346677889', 'lova.rakotobe@ophtalmo.mg', 2, 'pass123', NOW());
+
+
 CREATE TABLE "rendez_vous" (
   "id" SERIAL  PRIMARY KEY,
   "id_patient" integer,
