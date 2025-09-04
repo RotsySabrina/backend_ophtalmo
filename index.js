@@ -4,6 +4,7 @@ import cors from "cors";
 
 import roleRoutes from "./routes/RoleRoutes.js";
 import userRoutes from "./routes/UsersRoutes.js";
+import RendezVousRoutes from "./routes/RendezVousRoutes.js"
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.get("/", (req, res) => res.send("Backend Ophtalmo is running 🚀"));
 app.use("/roles", roleRoutes);
 app.use("/users", userRoutes);
+app.use("/rendez_vous", RendezVousRoutes);
 
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`)

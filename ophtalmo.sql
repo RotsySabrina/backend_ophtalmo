@@ -31,12 +31,19 @@ VALUES
 
 
 CREATE TABLE "rendez_vous" (
-  "id" SERIAL  PRIMARY KEY,
-  "id_patient" integer,
-  "id_medecin" integer,
-  "date_heure" datetime,
-  "status" integer
+  "id" SERIAL PRIMARY KEY,
+  "id_patient" INTEGER,
+  "id_medecin" INTEGER,
+  "date_heure" TIMESTAMP,
+  "status" INTEGER,
+  CONSTRAINT fk_patient FOREIGN KEY (id_patient) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_medecin FOREIGN KEY (id_medecin) REFERENCES users(id) ON DELETE SET NULL
 );
+
+INSERT INTO "rendez_vous" (id_patient, id_medecin, date_heure, status) VALUES
+(1, 4, '2025-09-05 09:00:00', 1),
+(2, 5, '2025-09-06 10:30:00', 1),
+(3, NULL, '2025-09-07 14:00:00', 0);
 
 CREATE TABLE "dossier_medical" (
   "id" SERIAL  PRIMARY KEY,
