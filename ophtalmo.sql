@@ -6,16 +6,6 @@ CREATE TABLE "role" (
   "titre" varchar
 );
 
-INSERT INTO "role" 
-(titre)
-VALUES
-('patient'),('medecin');
-
- id |  titre
-----+---------
-  1 | patient
-  2 | medecin
-
 CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
   "nom" varchar,
@@ -30,31 +20,6 @@ CREATE TABLE "users" (
   "created_at" timestamp
 );
 
-INSERT INTO "users" 
-(nom, prenom, sexe, date_naissance, adresse, telephone, email, role, mot_de_passe, created_at)
-VALUES
-('Rakoto', 'Jean', 1, '1985-03-12', 'Lot II A 45, Antananarivo', '0321234567', 'jean.rakoto@example.com', 1, 'hashedpassword1', NOW()),
-
-('Rasoa', 'Marie', 2, '1992-07-25', 'Lot IV B 102, Toamasina', '0349876543', 'marie.rasoa@example.com', 1, 'hashedpassword2', NOW()),
-
-('Randria', 'Paul ', 1, '1978-11-05', 'Lot III C 78, Fianarantsoa', '0336547891', 'paul.randria@example.com', 1, 'hashedpassword3', NOW()),
-
-('Andriamanga', 'Hery', 1, '1975-11-20', 'Ivandry, Antananarivo', '0324455667', 'hery.andriamanga@ophtalmo.mg', 2, 'pass123', NOW()),
-
-('Ravelo', 'Fara', 2, '1982-07-14', 'Isoraka, Antananarivo', '0335566778', 'fara.ravelo@ophtalmo.mg', 2, 'pass123', NOW()),
-
-('Rakotobe', 'Lova', 1, '1979-02-08', 'Ambanidia, Antananarivo', '0346677889', 'lova.rakotobe@ophtalmo.mg', 2, 'pass123', NOW());
-
- id |     nom     | prenom | sexe | date_naissance |          adresse           | telephone  |            email             | role |  mot_de_passe   |         created_at
-----+-------------+--------+------+----------------+----------------------------+------------+------------------------------+------+-----------------+----------------------------
-  1 | Rakoto      | Jean   |    1 | 1985-03-12     | Lot II A 45, Antananarivo  | 0321234567 | jean.rakoto@example.com      |    1 | hashedpassword1 | 2025-09-02 21:37:33.561066
-  2 | Rasoa       | Marie  |    2 | 1992-07-25     | Lot IV B 102, Toamasina    | 0349876543 | marie.rasoa@example.com      |    1 | hashedpassword2 | 2025-09-02 21:37:33.561066
-  3 | Randria     | Paul   |    1 | 1978-11-05     | Lot III C 78, Fianarantsoa | 0336547891 | paul.randria@example.com     |    1 | hashedpassword3 | 2025-09-02 21:37:33.561066
-  4 | Andriamanga | Hery   |    1 | 1975-11-20     | Ivandry, Antananarivo      | 0324455667 | hery.andriamanga@ophtalmo.mg |    2 | pass123         | 2025-09-04 22:20:20.11292
-  5 | Ravelo      | Fara   |    2 | 1982-07-14     | Isoraka, Antananarivo      | 0335566778 | fara.ravelo@ophtalmo.mg      |    2 | pass123         | 2025-09-04 22:20:20.11292
-  6 | Rakotobe    | Lova   |    1 | 1979-02-08     | Ambanidia, Antananarivo    | 0346677889 | lova.rakotobe@ophtalmo.mg    |    2 | pass123         | 2025-09-04 22:20:20.11292
-
-
 CREATE TABLE "rendez_vous" (
   "id" SERIAL PRIMARY KEY,
   "id_patient" INTEGER,
@@ -64,17 +29,6 @@ CREATE TABLE "rendez_vous" (
   CONSTRAINT fk_patient FOREIGN KEY (id_patient) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_medecin FOREIGN KEY (id_medecin) REFERENCES users(id) ON DELETE SET NULL
 );
-
-INSERT INTO "rendez_vous" (id_patient, id_medecin, date_heure, status) VALUES
-(1, 4, '2025-09-05 09:00:00', 1),
-(2, 5, '2025-09-06 10:30:00', 1),
-(3, NULL, '2025-09-07 14:00:00', 0);
-
- id | id_patient | id_medecin |     date_heure      | status
-----+------------+------------+---------------------+--------
-  1 |          1 |          4 | 2025-09-05 09:00:00 |      1
-  2 |          2 |          5 | 2025-09-06 10:30:00 |      1
-  3 |          3 |            | 2025-09-07 14:00:00 |      0
 
 CREATE TABLE "dossier_medical" (
   "id" SERIAL  PRIMARY KEY,
@@ -125,4 +79,25 @@ ALTER TABLE "consultation" ADD FOREIGN KEY ("id") REFERENCES "prescription" ("id
 
 ALTER TABLE "users" ADD FOREIGN KEY ("id") REFERENCES "notification" ("id_patient");
 
-insert INTO role (titre) VALUES ('patient'),('medecin');
+
+
+
+INSERT INTO "role" 
+(titre)
+VALUES
+('patient'),('medecin');
+
+INSERT INTO "users" 
+(nom, prenom, sexe, date_naissance, adresse, telephone, email, role, mot_de_passe, created_at)
+VALUES
+('Rakoto', 'Jean', 1, '1985-03-12', 'Lot II A 45, Antananarivo', '0321234567', 'jean.rakoto@example.com', 1, 'hashedpassword1', NOW()),
+('Rasoa', 'Marie', 2, '1992-07-25', 'Lot IV B 102, Toamasina', '0349876543', 'marie.rasoa@example.com', 1, 'hashedpassword2', NOW()),
+('Randria', 'Paul ', 1, '1978-11-05', 'Lot III C 78, Fianarantsoa', '0336547891', 'paul.randria@example.com', 1, 'hashedpassword3', NOW()),
+('Andriamanga', 'Hery', 1, '1975-11-20', 'Ivandry, Antananarivo', '0324455667', 'hery.andriamanga@ophtalmo.mg', 2, 'pass123', NOW()),
+('Ravelo', 'Fara', 2, '1982-07-14', 'Isoraka, Antananarivo', '0335566778', 'fara.ravelo@ophtalmo.mg', 2, 'pass123', NOW()),
+('Rakotobe', 'Lova', 1, '1979-02-08', 'Ambanidia, Antananarivo', '0346677889', 'lova.rakotobe@ophtalmo.mg', 2, 'pass123', NOW());
+
+INSERT INTO "rendez_vous" (id_patient, id_medecin, date_heure, status) VALUES
+(1, 4, '2025-09-05 09:00:00', 1),
+(2, 5, '2025-09-06 10:30:00', 1),
+(3, NULL, '2025-09-07 14:00:00', 0);
