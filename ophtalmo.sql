@@ -58,6 +58,7 @@ CREATE TABLE "notification" (
 );
 
 CREATE TABLE "regle_creneau" (
+  "id" SERIAL  PRIMARY KEY,
   "ouverture" varchar,
   "fermeture" varchar,
   "pause_debut" varchar,
@@ -69,6 +70,21 @@ CREATE TABLE IF NOT EXISTS status_rdv (
     id INT PRIMARY KEY,
     name VARCHAR(50)
 );
+
+CREATE OR REPLACE VIEW vue_rendez_vous AS
+SELECT rv.id,
+       rv.date_heure,
+       rv.status,
+       p.id AS patient_id,
+       p.nom AS patient_nom,
+       p.prenom AS patient_prenom,
+       m.id AS medecin_id,
+       m.nom AS medecin_nom,
+       m.prenom AS medecin_prenom
+FROM rendez_vous rv
+JOIN users p ON rv.id_patient = p.id
+LEFT JOIN users m ON rv.id_medecin = m.id;
+
 
 ALTER TABLE "role" ADD FOREIGN KEY ("id") REFERENCES "users" ("role");
 
