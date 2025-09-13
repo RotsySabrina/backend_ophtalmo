@@ -148,3 +148,10 @@ INSERT INTO status_rdv (id, name) VALUES
 (1, 'en attente'),
 (0, 'annule'),
 (10, 'confirme');
+
+ALTER TABLE regle_creneau 
+ADD COLUMN duree_rdv INTEGER DEFAULT 60,  -- durée en minutes (ici 1h)
+ADD COLUMN delai_min_reservation INTEGER DEFAULT 15; -- en jours
+
+INSERT INTO regle_creneau (ouverture, fermeture, pause_debut, pause_fin, jours_non_travailles)
+VALUES ('08:00', '17:00', '12:00', '14:00', 'dimanche'); 
