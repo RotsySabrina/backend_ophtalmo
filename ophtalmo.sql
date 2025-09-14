@@ -31,23 +31,53 @@ CREATE TABLE "rendez_vous" (
 );
 
 CREATE TABLE "dossier_medical" (
-  "id" SERIAL  PRIMARY KEY,
-  "id_patient" integer,
-  "date_creation" date
+  "id" SERIAL PRIMARY KEY,
+  "id_patient" INTEGER NOT NULL,
+  "date_creation" DATE DEFAULT CURRENT_DATE,
+  "antecedents_ophthalmologiques" TEXT,
+  "antecedents_medicaux" TEXT,
+  "allergies" TEXT,
+  "traitements_actuels" TEXT,
+  "remarques" TEXT,
+  CONSTRAINT fk_patient FOREIGN KEY (id_patient) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE "consultation" (
-  "id" SERIAL  PRIMARY KEY,
-  "id_dossier" integer,
-  "date_consultation" date,
-  "type" text
+  "id" SERIAL PRIMARY KEY,
+  "id_dossier" INTEGER NOT NULL,
+  "date_consultation" DATE NOT NULL,
+  "id_medecin" INTEGER NOT NULL,
+  "motif" TEXT NOT NULL,
+  "acuite_visuelle_od" VARCHAR(20), -- Œil droit
+  "acuite_visuelle_og" VARCHAR(20), -- Œil gauche
+  "tonometrie_od" VARCHAR(20),      -- Pression œil droit
+  "tonometrie_og" VARCHAR(20),      -- Pression œil gauche
+  "refraction_od" VARCHAR(100),     -- Correction œil droit
+  "refraction_og" VARCHAR(100),     -- Correction œil gauche
+  "fond_oeil" TEXT,                 -- Observations fond d'œil
+  "biometrie" TEXT,                 -- Mesures biométriques
+  "diagnostic" TEXT,
+  "traitement_propose" TEXT,
+  "observations" TEXT,
+  "prochaine_visite" DATE,
+  CONSTRAINT fk_dossier FOREIGN KEY (id_dossier) REFERENCES dossier_medical(id) ON DELETE CASCADE,
+  CONSTRAINT fk_medecin FOREIGN KEY (id_medecin) REFERENCES users(id) ON DELETE RESTRICT
 );
 
+-- Table prescription améliorée pour l'ophtalmologie
 CREATE TABLE "prescription" (
-  "id" SERIAL  PRIMARY KEY,
-  "id_consultation" integer,
-  "type" text,
-  "details" text
+  "id" SERIAL PRIMARY KEY,
+  "id_consultation" INTEGER NOT NULL,
+  "type" VARCHAR(50) NOT NULL CHECK (type IN ('lunettes', 'lentilles', 'medicament', 'examens', 'autre')),
+  "details" TEXT NOT NULL,
+  "oeil" VARCHAR(2) CHECK (oeil IN ('OD', 'OG', 'OD/OG')), -- Œil droit, œil gauche ou les deux
+  "quantite" VARCHAR(50),
+  "duree" VARCHAR(50),
+  "posologie" TEXT,
+  "date_debut" DATE,
+  "date_fin" DATE,
+  "statut" VARCHAR(20) DEFAULT 'prescrit' CHECK (statut IN ('prescrit', 'dispense', 'annule')),
+  CONSTRAINT fk_consultation FOREIGN KEY (id_consultation) REFERENCES consultation(id) ON DELETE CASCADE
 );
 
 CREATE TABLE "notification" (
@@ -96,10 +126,6 @@ ALTER TABLE "users" ADD FOREIGN KEY ("id") REFERENCES "rendez_vous" ("id_patient
 ALTER TABLE "users" ADD FOREIGN KEY ("id") REFERENCES "rendez_vous" ("id_medecin");
 
 ALTER TABLE "users" ADD FOREIGN KEY ("id") REFERENCES "dossier_medical" ("id_patient");
-
-ALTER TABLE "dossier_medical" ADD FOREIGN KEY ("id") REFERENCES "consultation" ("id_dossier");
-
-ALTER TABLE "consultation" ADD FOREIGN KEY ("id") REFERENCES "prescription" ("id_consultation");
 
 ALTER TABLE "users" ADD FOREIGN KEY ("id") REFERENCES "notification" ("id_patient");
 
@@ -160,3 +186,55 @@ INSERT INTO regle_creneau (ouverture, fermeture, pause_debut, pause_fin, jours_n
 VALUES ('08:00', '17:00', '12:00', '14:00', 'dimanche'); 
 
 INSERT INTO notification ('id_patient','message','type') VALUES(1, 'Votre rendez-vous est confirmé', 'confirmation_rdv')
+
+/*avec postman:
+
+Créer un dossier médical
+
+POST http://localhost:5000/ophtalmologie/dossier
+
+{
+  "id_patient": 1,
+  "antecedents_ophthalmologiques": "Myopie depuis l'enfance",
+  "antecedents_medicaux": "Hypertension traitée",
+  "allergies": "Pollen, acariens",
+  "traitements_actuels": "Lumigan 1 goutte œil droit le soir",
+  "remarques": "Patient très compliant"
+}
+
+Créer une consultation
+
+POST http://localhost:5000/ophtalmologie/consultation
+
+{
+  "id_dossier": 1,
+  "date_consultation": "2024-01-15",
+  "id_medecin": 2,
+  "motif": "Consultation de routine",
+  "acuite_visuelle_od": "10/10",
+  "acuite_visuelle_og": "8/10",
+  "tonometrie_od": "15 mmHg",
+  "tonometrie_og": "16 mmHg",
+  "refraction_od": "Plan",
+  "refraction_og": "-1.50 (-0.50) 180°",
+  "fond_oeil": "Normal",
+  "diagnostic": "Myopie légère œil gauche",
+  "traitement_propose": "Correction optique",
+  "observations": "Patient à revoir dans 1 an"
+}
+
+Ajouter une prescription
+
+POST http://localhost:5000/ophtalmologie/prescription
+
+{
+  "id_consultation": 1,
+  "type": "lunettes",
+  "details": "Verres unifocaux anti-reflet",
+  "oeil": "OG",
+  "quantite": "1 paire",
+  "duree": "Illimitée"
+}
+
+*/
+

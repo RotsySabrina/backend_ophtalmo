@@ -8,6 +8,7 @@ import RendezVousRoutes from "./routes/RendezVousRoutes.js"
 import statsRoutes from "./routes/StatsRoutes.js";
 import authRoutes from "./routes/AuthRoutes.js";
 import notificationRoutes from './routes/NotificationRoutes.js';
+import ophtalmologieRoutes from './routes/OphtalmologieRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -23,6 +24,8 @@ app.use("/rendez_vous", RendezVousRoutes);
 app.use("/stats", statsRoutes);
 app.use("/auth", authRoutes);
 app.use('/notifications', notificationRoutes);
+
+app.use('/ophtalmologie', ophtalmologieRoutes);
 
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`)
