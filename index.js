@@ -6,7 +6,8 @@ import roleRoutes from "./routes/RoleRoutes.js";
 import userRoutes from "./routes/UsersRoutes.js";
 import RendezVousRoutes from "./routes/RendezVousRoutes.js"
 import statsRoutes from "./routes/StatsRoutes.js";
-import authRoutes from "./routes/AuthRoutes.js"
+import authRoutes from "./routes/AuthRoutes.js";
+import notificationRoutes from './routes/NotificationRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.use("/users", userRoutes);
 app.use("/rendez_vous", RendezVousRoutes);
 app.use("/stats", statsRoutes);
 app.use("/auth", authRoutes);
+app.use('/notifications', notificationRoutes);
 
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`)

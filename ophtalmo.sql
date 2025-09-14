@@ -53,8 +53,11 @@ CREATE TABLE "prescription" (
 CREATE TABLE "notification" (
   "id" SERIAL  PRIMARY KEY,
   "id_patient" integer,
-  "date_creation" date,
-  "message" text
+  "date_creation" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "message" text,
+  "statut" INTEGER DEFAULT 0, -- 0 = non lu, 1 = lu
+  "type" VARCHAR(50),
+  "date_lu" TIMESTAMP
 );
 
 CREATE TABLE "regle_creneau" (
@@ -155,3 +158,5 @@ ADD COLUMN delai_min_reservation INTEGER DEFAULT 15; -- en jours
 
 INSERT INTO regle_creneau (ouverture, fermeture, pause_debut, pause_fin, jours_non_travailles)
 VALUES ('08:00', '17:00', '12:00', '14:00', 'dimanche'); 
+
+INSERT INTO notification ('id_patient','message','type') VALUES(1, 'Votre rendez-vous est confirmé', 'confirmation_rdv')
